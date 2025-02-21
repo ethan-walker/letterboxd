@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>My Website</title>
+   <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+   <header>
+      <input type="file" id="data-input" name="name" accept=".zip" />
+      <span>Go to <a href="https://letterboxd.com/data/export/">https://letterboxd.com/data/export/</a> and upload the <code>.zip</code> file here</span>
+   </header>
+   <main>
+      <ul class="data-display">
+         <li class="release-year"></li>
+         <li class="rating"></li>
+         <li class="mode"></li>
+      </ul>
+   </main>
+
+   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+   <script src="script.js"></script>
+</body>
+</html>
