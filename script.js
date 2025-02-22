@@ -1,6 +1,7 @@
 const inputElement = document.getElementById("data-input");
 
-var ratingArr = ["0", "0.5", "1", "1.5", "2", "2.5", "3", "3.5", "4", "4.5", "5"]
+Chart.defaults.backgroundColor = CHART_COLOUR;
+Chart.defaults.font.family = "Figtree";
 
 function stringToDict(str) {
    rows = str.split(/\r\n(?![^"]*",)/).map(row => row.split(/,(?![^"]*",)/));
@@ -15,22 +16,7 @@ function stringToDict(str) {
    });
    return grid.slice(0, -1);
 }
-function freqObj(arr) {
-   var obj = {};
-   arr.forEach(item => {
-      if (obj[item]) {
-         obj[item] += 1;
-      }
-      else {
-         obj[item] = 1;
-      }
-   })
-   return obj;
-}
-const arrAvg = (arr) => {
-   arr = arr.filter(item => item !== "")
-   return arr.reduce((acc, curr) => parseFloat(acc) + parseFloat(curr)) / arr.length;
-}
+
 
 const mostFrequent = arr =>
    Object.entries(
@@ -42,15 +28,6 @@ const mostFrequent = arr =>
 
 inputElement.onchange = handleZip;
 
-// function() {
-//    var zip = new JSZip();
-//    zip.loadAsync( this.files[0] /* = file blob */)
-//       .then(function(zip) {
-//           console.log(zip);
-//          //  const reader = new FileReader();
-//          //  reader.readAsText(diary);
-      
-// };
 async function loadFileContents(zip, filename) {
    return zip.file(filename).async("string").then(data => {
       // console.log(data);
@@ -80,33 +57,21 @@ function handleRatings(data) {
    modeRating = mostFrequent(ratings);
    document.querySelector(".mode").textContent = "Most Common Rating: " + modeRating;
 
-   ratingFreq = [];
-   ratingArr.forEach((rating, index) => {
-      count = ratings.filter(x => x === rating).length;
-      ratingFreq[index] = count;
-   })
-   console.log(ratingFreq);
+   ratingFreq = MAP_FREQS(ratings, RATING_LABELS);
+
    const chartData = {
-      labels: ratingArr,
+      labels: RATING_LABELS,
       datasets: [{
         label: "Rating",
         data: ratingFreq,
-        backgroundColor: 'rgba(255, 99, 132)',
         borderRadius: 5,
-       //  borderColor: 'rgb(255, 99, 132)',
-        borderWidth: 1
+        categoryPercentage: 0.9
       }]
     };
     const config = {
       type: 'bar',
       data: chartData,
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
-      },
+      options: {}
    };
    new Chart("bar-chart", config);
 }
@@ -119,43 +84,27 @@ function handleWatched(data) {
    numWatched = data.length;
    document.querySelector(".num-watched").textContent = "Total Watched: " + numWatched;
 
-   yearFreq = freqObj(years);
+   yearLabels = GET_CONTINUOUS_VALUES(years);
+   yearFreq = MAP_FREQS(years, yearLabels);
+
    const chartData = {
-      labels: Object.keys(yearFreq),
+      labels: yearLabels,
       datasets: [{
-        label: "Release Year",
-        data: Object.values(yearFreq),
-        backgroundColor: 'rgba(255, 99, 132)',
+        label: "# Films",
+        data: yearFreq,
         borderRadius: 2,
-       //  borderColor: 'rgb(255, 99, 132)',
-        borderWidth: 1
+        categoryPercentage: 0.95,
+        skipNull: false
       }]
     };
     const config = {
       type: 'bar',
       data: chartData,
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
-      },
+      options: {}
    };
    new Chart("release-chart", config);
 }
 function handleReviews(data) {
-   console.log(data);
    numReviewed = data.length;
    document.querySelector(".num-reviewed").textContent = "Total Reviewed: " + numReviewed;
 }
-
-Chart.defaults.font.family = "Figtree"
-   // ,
-   // options: {
-   //   legend: {display: false},
-   //   scales: {
-   //     xAxes: [{ticks: {min: 40, max:160}}],
-   //     yAxes: [{ticks: {min: 6, max:16}}],
-   //   }
-   // }
