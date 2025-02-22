@@ -22,3 +22,8 @@ header {
    display: grid;
    place-items: center;
 }
+
+.chart {
+   width: min(calc(100% - 2rem), 60rem) !important;
+   margin-inline: auto;
+}

@@ -14,7 +14,7 @@ function stringToDict(str) {
       })
       return dict;
    });
-   return grid.slice(0, -1);
+   return grid.slice(0, -1); // remove header
 }
 
 
@@ -57,6 +57,23 @@ function handleRatings(data) {
    modeRating = mostFrequent(ratings);
    document.querySelector(".mode").textContent = "Most Common Rating: " + modeRating;
 
+   var ratingCats = {"positive" : 0, "neutral": 0, "negative": 0}
+   
+   ratings.forEach(rating => {
+      rating = parseFloat(rating);
+      if (rating === 2.5) {
+         ratingCats.neutral++;;
+      }
+      else if (rating > 2.5) {
+         ratingCats.positive++;
+      }
+      else {
+         ratingCats.negative++;
+      }
+   })
+   console.log(ratingCats);
+   // CHART MAKING
+   
    ratingFreq = MAP_FREQS(ratings, RATING_LABELS);
 
    const chartData = {
@@ -74,10 +91,59 @@ function handleRatings(data) {
       options: {}
    };
    new Chart("bar-chart", config);
+
+   // RATING BY DECADE
+
+   years = REMOVE_BLANK(data.map(row => row.year));
+   yearAndRating = data.map(row => { return {"year" : row.year, "rating" : row.rating}})
+      .filter(x => x.year !== "");
+   console.log(yearAndRating);
+
+   minYear = Math.min(...years);
+   maxYear = Math.max(...years);
+   minDecade = GET_DECADE(minYear);
+   maxDecade = GET_DECADE(maxYear);
+
+   decadeList = arrFromRange(minDecade, maxDecade, 10);
+   decadeFreq = [];
+   decadeList.forEach((decade, index) => {
+      decadeRatings = yearAndRating.filter(x => GET_DECADE(x.year) === parseInt(decade))
+         .map(x => x.rating);
+      if(decadeRatings.length !== 0) {
+         avgRating = arrAvg(decadeRatings).toFixed(2);
+         decadeFreq[index] = avgRating;
+      }
+   });
+   console.log(decadeFreq);
+
+   const decadeData = {
+      labels: decadeList.map(decade => decade + "s"),
+      datasets: [{
+        label: "Avg. Rating",
+        data: decadeFreq,
+        borderRadius: 2,
+        categoryPercentage: 0.95,
+        skipNull: false
+      }]
+   };
+   const decadeConfig = {
+      type: 'bar',
+      data: decadeData,
+      options: {}
+   };
+   new Chart("decade-chart", decadeConfig);
 }
 
+// WATCHED.CSV DATASET
+// Contains:
+//    - NAME
+//    - RELEASE YEAR
+//    - DATE ADDED TO LETTERBOXD (NOT DATE WATCHED)
+//    - LINK
+
 function handleWatched(data) {
-   years = data.map(row => row.year);
+   years = REMOVE_BLANK(data.map(row => row.year));
+
    avgYear = Math.round(arrAvg(years));
    document.querySelector(".release-year").textContent = "Average Release Year: " + avgYear;
 
@@ -96,13 +162,14 @@ function handleWatched(data) {
         categoryPercentage: 0.95,
         skipNull: false
       }]
-    };
-    const config = {
+   };
+   const config = {
       type: 'bar',
       data: chartData,
       options: {}
    };
    new Chart("release-chart", config);
+
 }
 function handleReviews(data) {
    numReviewed = data.length;

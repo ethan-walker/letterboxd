@@ -1,5 +1,9 @@
+// GENERAL UTILITY
+const REMOVE_BLANK = (arr) => arr.filter(x => x !== "");
+
+// OTHER FUNCTIONS
 const arrAvg = (arr) => {
-   arr = arr.filter(item => item !== "")
+   arr = REMOVE_BLANK(arr);
    return arr.reduce((acc, curr) => parseFloat(acc) + parseFloat(curr)) / arr.length;
 }
 
@@ -25,7 +29,7 @@ function arrFromRange(start, end, step = 1, asString = true) {
 }
 
 function GET_CONTINUOUS_VALUES(arr, step = 1) {
-   arr = [...new Set(arr)].filter(x => x !== ""); // remove duplicates and blank
+   arr = REMOVE_BLANK([...new Set(arr)]); // remove duplicates and blank
    return arrFromRange(Math.min(...arr), Math.max(...arr), step)
 }
 
@@ -37,3 +41,4 @@ function MAP_FREQS(arr, values) {
    })
    return res;
 }
+const GET_DECADE = (num) => Math.floor(num / 10) * 10;
