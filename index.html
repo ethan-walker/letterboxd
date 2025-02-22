@@ -23,9 +23,26 @@
          <li class="rating"></li>
          <li class="mode"></li>
       </ul>
-      <canvas class="chart" id="bar-chart"></canvas>
-      <canvas class="chart" id="release-chart"></canvas>
-      <canvas class="chart" id="decade-chart"></canvas>
+      <figure class="chart">
+         <figcaption>Rating Distribution</figcaption>
+         <canvas id="bar-chart"></canvas>
+      </figure>
+      <figure class="chart">
+         <figcaption>Release Year</figcaption>
+         <canvas id="release-chart"></canvas>
+      </figure>
+      <figure class="chart">
+         <figcaption>Rating By Decade</figcaption>
+         <canvas id="decade-chart"></canvas>
+      </figure>
+      <figure class="chart">
+         <figcaption>Day of the week</figcaption>
+         <canvas id="day-chart"></canvas>
+      </figure>
+      <figure class="chart">
+         <figcaption>Month of the year</figcaption>
+         <canvas id="month-chart"></canvas>
+      </figure>
    </main>
 
    <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>

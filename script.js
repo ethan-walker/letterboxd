@@ -43,12 +43,65 @@ function handleZip() {
          loadFileContents(zip, "ratings.csv").then(handleRatings);
 
          loadFileContents(zip, "reviews.csv").then(handleReviews);
+
+         loadFileContents(zip, "diary.csv").then(handleDiary);
+
       }, function() {alert("Not a valid zip file")});
 }
+// DIARY
+// Contents:
+//    - Date Watched
+//    - Name
+//    - Release Year
 
 function handleDiary(data) {
+   watchDate = data.map(row => row["watched date"]);
    
+   dayFreq = Array(7).fill(0)
+   monthFreq = Array(12).fill(0)
+
+   watchDate.forEach(date => {
+      let d = new Date(date);
+      let day = (d.getDay() + 6) % 7; // adjust so monday is day 0 (not sunday)
+      dayFreq[day]++;
+
+      let month = d.getMonth();
+      monthFreq[month]++;
+   })
+   
+   const chartData = {
+      labels: DAYS,
+      datasets: [{
+        label: "#",
+        data: dayFreq,
+        borderRadius: 5,
+        categoryPercentage: 0.9
+      }]
+    };
+    const config = {
+      type: 'bar',
+      data: chartData,
+      options: {}
+   };
+   new Chart("day-chart", config);
+
+   const monthData = {
+      labels: MONTHS,
+      datasets: [{
+        label: "#",
+        data: monthFreq,
+        borderRadius: 5,
+        categoryPercentage: 0.9
+      }]
+    };
+    const monthConfig = {
+      type: 'bar',
+      data: monthData,
+      options: {}
+   };
+   new Chart("month-chart", monthConfig);
 }
+
 function handleRatings(data) {
    ratings = data.map(row => row.rating);
    avgRating = arrAvg(ratings).toFixed(2);

@@ -35,7 +35,8 @@ const DAYS = [
    "Wednesday",
    "Thursday",
    "Friday",
-   "Saturday"
+   "Saturday",
+   "Sunday"
 ]
 const DAYS_SHORT = [
    "Mon",
