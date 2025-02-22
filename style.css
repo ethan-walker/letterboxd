@@ -15,7 +15,8 @@ img {
 }
 
 body {
-   line-height: 1.5
+   line-height: 1.5;
+   font-family: "Atkinson Hyperlegible Next", sans-serif;
 }
 header {
    display: grid;

@@ -1,7 +1,7 @@
 const inputElement = document.getElementById("data-input");
 
 function stringToDict(str) {
-   rows = str.split("\r\n").map(row => row.split(","));
+   rows = str.split("\r\n").map(row => row.split(/(?!\B"[^"]*),(?![^"]*"\B)/));
    header = rows[0].map(item => item.toLowerCase());
    rows = rows.slice(1);
    grid = rows.map(row => {
@@ -48,7 +48,9 @@ function handleZip() {
 }
 
 function handleDiary(data) {
+   console.log(data);
    ratings = data.map(row => row.rating);
+   console.log(ratings);
    avgRating = arrAvg(ratings).toFixed(2);
    document.querySelector(".rating").textContent = "Average Rating: " + avgRating;
 
