@@ -13,7 +13,10 @@ function stringToDict(str) {
    });
    return grid.slice(0, -1);
 }
-const arrAvg = (arr) => arr.reduce((acc, curr) => parseFloat(acc) + parseFloat(curr)) / arr.length;
+const arrAvg = (arr) => {
+   arr = arr.filter(item => item !== "")
+   return arr.reduce((acc, curr) => parseFloat(acc) + parseFloat(curr)) / arr.length;
+}
 
 const mostFrequent = arr =>
    Object.entries(
@@ -41,13 +44,16 @@ function handleZip() {
    var zip = new JSZip();
    zip.loadAsync( this.files[0] /* = file blob */)
       .then(function(zip) {
-         loadFileContents(zip, "diary.csv").then(handleDiary);
-
          loadFileContents(zip, "watched.csv").then(handleWatched);
+
+         loadFileContents(zip, "ratings.csv").then(handleRatings);
       }, function() {alert("Not a valid zip file")});
 }
 
 function handleDiary(data) {
+   
+}
+function handleRatings(data) {
    console.log(data);
    ratings = data.map(row => row.rating);
    console.log(ratings);
@@ -56,12 +62,11 @@ function handleDiary(data) {
 
    modeRating = mostFrequent(ratings);
    document.querySelector(".mode").textContent = "Most Common Rating: " + modeRating;
-
-   years = data.map(row => row.year);
-   avgYear = Math.round(arrAvg(years));
-   document.querySelector(".release-year").textContent = "Average Release Year: " + avgYear;
 }
 
 function handleWatched(data) {
-   
+   years = data.map(row => row.year);
+   console.log(years);
+   avgYear = Math.round(arrAvg(years));
+   document.querySelector(".release-year").textContent = "Average Release Year: " + avgYear;
 }
