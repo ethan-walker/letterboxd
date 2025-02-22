@@ -8,7 +8,7 @@
 
    <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
 
 <link href="https://api.fontshare.com/v2/css?f[]=general-sans@1,2&display=swap" rel="stylesheet">
 <body>
@@ -18,13 +18,18 @@
    </header>
    <main>
       <ul class="data-display">
+         <li class="num-watched"></li>
+         <li class="num-reviewed"></li>
          <li class="release-year"></li>
          <li class="rating"></li>
          <li class="mode"></li>
       </ul>
+      <canvas class="chart" id="bar-chart"></canvas>
+      <canvas class="chart" id="release-chart"></canvas>
    </main>
 
    <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
    <script src="script.js"></script>
 </body>
 </html>
